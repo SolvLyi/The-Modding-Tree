@@ -8,7 +8,7 @@ addLayer("r", {
     }},
     color: "#13dcbbff",
     requires: new Decimal(10), // Can be a function that takes requirement increases into account
-    resource: "rebirth points", // Name of prestige currency
+    resource: "rebirths", // Name of prestige currency
     baseResource: "points", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
@@ -22,18 +22,27 @@ addLayer("r", {
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "r", description: "R: Reset for rebirth points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "r", description: "R: Reset for rebirths", onPress(){if (canReset("r")) doReset("r")}},
     ],
     layerShown(){return true},
      upgrades: {
-         11: {    title: "Make this whatever you want!",
+        11: {    title: "Make this whatever you want!",
     description: "Double your point gain.",
     cost: new Decimal(1),
          },
-         12: {    title: "yeah this upgrade again",
+        12: {    title: "yeah this upgrade again",
     description: "Double your point gain.",
     cost: new Decimal(2),
         },
+        13: {    title: "ok bro what",
+    description: "Boost your points based on rebirths.",
+    cost: new Decimal(3),
+    effect() {
+        return player["r"].points.add(1).pow(0.25)
+    },
+    effectDisplay() { return format(upgradeEffect("r", 13))+"x" }, // Add formatting to the effect
+        },
+    
 
     },
 })
