@@ -11,10 +11,11 @@ addLayer("r", {
     resource: "rebirths", // Name of prestige currency
     baseResource: "points", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
-    type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.8, // Prestige currency exponent
+    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 0.75, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+        if (hasUpgrade('r', 14)) mult = mult.times(upgradeEffect('r', 14))
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -30,17 +31,29 @@ addLayer("r", {
     description: "Double your point gain.",
     cost: new Decimal(1),
          },
-        12: {    title: "yeah this upgrade again",
+        12: {    title: "Make this whatever you want! Again!",
     description: "Double your point gain.",
     cost: new Decimal(2),
+    unlocked() { return hasUpgrade("r", 11); },
         },
-        13: {    title: "ok bro what",
+        13: {    title: "...yeah, another basic upgrade.",
     description: "Boost your points based on rebirths.",
     cost: new Decimal(3),
+    unlocked() { return hasUpgrade("r", 11); },
     effect() {
         return player["r"].points.add(1).pow(0.25)
     },
     effectDisplay() { return format(upgradeEffect("r", 13))+"x" }, // Add formatting to the effect
+        14: {    title: "Okay, this is getting basic really fast.",
+    description: "Boost your points based on rebirths.",
+    cost: new Decimal(3),
+    unlocked() { return hasUpgrade("r", 11); },
+    effect() {
+        return player["r"].points.add(1).pow(0.1)
+    },
+    effectDisplay() { return format(upgradeEffect("r", 14))+"x" }, // Add formatting to the effect
+    },
+        
         },
     
 
